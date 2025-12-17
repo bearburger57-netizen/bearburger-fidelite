@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Fidélité Bear Burger</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: linear-gradient(145deg, #1c1c1c, #141414);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+h1 {
+  text-align: center;
+  color: #ffb000;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: #ffb000;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.progress {
+  background: #333;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.bar {
+  height: 20px;
+  width: 0%;
+  background: linear-gradient(90deg, #ffb000, #ff6a00);
+  transition: width 0.4s;
+}
+
+.info {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>🍔 Bear Burger</h1>
+
+    <input type="tel" id="tel" placeholder="Ton numéro de téléphone">
+
+    <button onclick="check()">Voir mes points</button>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <p class="info" id="info"></p>
+  </div>
+</div>
+
+<script>
+const API_URL = "COLLE_ICI_TON_URL_APPS_SCRIPT";
+const MAX_POINTS = 8;
+
+function check() {
+  const tel = document.getElementById("tel").value;
+  if (!tel) return;
+
+  fetch(`${API_URL}?telephone=${tel}`)
+    .then(r => r.json())
+    .then(d => {
+      if (d.created) {
+        document.getElementById("info").innerText =
+          "Bienvenue 🎉 Tu gagnes ton premier point à ta prochaine commande 🍔";
+      } else {
+        document.getElementById("info").innerText =
+          `Tu as ${d.points} points sur ${MAX_POINTS}`;
+        document.getElementById("bar").style.width =
+          (d.points / MAX_POINTS * 100) + "%";
+      }
+    });
+}
+</script>
+
+</body>
+</html>
